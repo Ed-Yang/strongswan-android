@@ -4,6 +4,7 @@
 
 * [Building the strongSwan VPN Client for Android](https://wiki.strongswan.org/projects/strongswan/wiki/AndroidVPNClientBuild)
 * [strongswan android编译过程](https://blog.csdn.net/lllkey/article/details/79993609)
+* [Strongswan Git for OpenSSL](https://git.strongswan.org/)
 
 
 # Install Build Tools and Library
@@ -33,17 +34,24 @@ complains the file system setting is not the same as IDE.
 
 ```
     # Make source folder
-    $ mkdir -p ~/proj/tmp && cd ~/proj/tmp
+    $ git clone https://github.com/Ed-Yang/strongswan-android.git
+    $ cd strongswan-android
 
     # Get strongswan latest source
     $ git clone git://git.strongswan.org/strongswan.git
+    $ export SS_HOME=`pwd`/strongswan
+
+    $ cd ./strongswan/src/frontends/android/app/src/main/jni
 
     # Get boringssl source 
-    $ cd ./strongswan/src/frontends/android/app/src/main/jni
     $ git clone git://git.strongswan.org/android-ndk-boringssl.git -b ndk-static openssl
 
-    # Optionally, clear the tree
-    $ cd ~/proj/tmp/strongswan
+    or 
+
+    # Get openssl source (NOT WORK !!!!)
+    $ git clone git://git.strongswan.org/android-ndk-openssl.git -b ndk-static openssl
+
+    $ cd ${SS_HOME}
 
     # See Alexandre Duret Lutz's Autotools tutorial for aclocal (I did not read....)
     $ aclocal -I m4
@@ -61,19 +69,19 @@ Take a note, if we want to clean the source tree:
 # Install and Setup Android Studio
 
 * Install [Android SDK and NDK](https://developer.android.com/studio/).  The Android Studio will be installed to "~/Library/Android".
-* Launch Androind Studio, click "Open an existing Andriod Studo project" and select folder "~/proj/tmp/strongswan/src/frontends/android".  
+* Launch Androind Studio, click "Open an existing Andriod Studo project" and select folder "${SS_HOME}/src/frontends/android".  
 * The initial launch of Android Studio, the NDK directory is not known. Select "File-->Project Structure" to install or setup NDK path (ex. ~/Library/Android/sdk/ndk-bundle).
 
 # Build Native Part
 
-* Modify ~/proj/tmp/strongswan/src/frontends/android/app/src/main/jni/Application.mk
+* Modify cd ${SS_HOME}/src/frontends/android/app/src/main/jni/Application.mk
 ```
     #APP_ABI := armeabi arm64-v8a x86 x86_64 mips mips64
     APP_ABI := armeabi-v7a arm64-v8a x86 x86_64 
 ```
 * Build
 ```
-    $ cd ~/proj/tmp/strongswan/src/frontends/android/app/src/main/jni
+    $ cd ${SS_HOME}/src/frontends/android/app/src/main/jni
     $ ~/Library/Android/sdk/ndk-bundle/ndk-build
 ```
 
@@ -86,7 +94,7 @@ Take a note, if we want to clean the source tree:
 * In Androind Studio, select "Tools-->AVD Manager" to create a virtual devie.
 * Select "Run-->Run 'app'"
 
-
+# Author
 Edward Yang, June 16, 2018.
 
 
